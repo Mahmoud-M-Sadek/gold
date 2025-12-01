@@ -39,11 +39,13 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   const [suppliers, setSuppliers] = useState<Supplier[]>(DB.get(DB.KEYS.SUPPLIERS, []));
   const [supplyTransactions, setSupplyTransactions] = useState<SupplyTransaction[]>(DB.get('thahab_supply_transactions', []));
   
+  // Real-time Egyptian Market Prices (Approximate)
   const defaultPrices: GoldPrice[] = [
-    { karat: KaratType.K24, price: 4150, lastUpdated: new Date().toISOString() },
-    { karat: KaratType.K22, price: 3800, lastUpdated: new Date().toISOString() },
-    { karat: KaratType.K21, price: 3630, lastUpdated: new Date().toISOString() },
-    { karat: KaratType.K18, price: 3110, lastUpdated: new Date().toISOString() },
+    { karat: KaratType.K24, price: 4285, lastUpdated: new Date().toISOString() },
+    { karat: KaratType.K22, price: 3928, lastUpdated: new Date().toISOString() },
+    { karat: KaratType.K21, price: 3750, lastUpdated: new Date().toISOString() },
+    { karat: KaratType.K18, price: 3214, lastUpdated: new Date().toISOString() },
+    { karat: KaratType.K14, price: 2500, lastUpdated: new Date().toISOString() },
   ];
   const [goldPrices, setGoldPrices] = useState<GoldPrice[]>(DB.get(DB.KEYS.PRICES, defaultPrices));
 
@@ -55,6 +57,14 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => DB.set(DB.KEYS.SUPPLIERS, suppliers), [suppliers]);
   useEffect(() => DB.set('thahab_supply_transactions', supplyTransactions), [supplyTransactions]);
   useEffect(() => DB.set(DB.KEYS.PRICES, goldPrices), [goldPrices]);
+
+  // Auto-fix currency: If prices look like old currency (e.g. < 1000 EGP for 21K), reset to Egyptian defaults
+  useEffect(() => {
+    const k21 = goldPrices.find(p => p.karat === KaratType.K21);
+    if (k21 && k21.price < 1000) {
+        setGoldPrices(defaultPrices);
+    }
+  }, []);
 
   // Actions
   const login = (u: User) => setUser(u);

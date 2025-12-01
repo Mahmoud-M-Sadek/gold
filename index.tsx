@@ -17,11 +17,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     this.state = { hasError: false, error: null };
   }
 
-  public state: ErrorBoundaryState = {
-    hasError: false,
-    error: null
-  };
-
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
