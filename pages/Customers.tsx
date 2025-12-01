@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
-import { Customer, Sale } from '../types';
+import { Customer } from '../types';
 import { Plus, Search, Edit2, Phone, MapPin, User, FileText, X } from 'lucide-react';
 
 const Customers = () => {

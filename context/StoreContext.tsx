@@ -72,7 +72,7 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
     const updatedProducts = products.map(p => {
       const soldItem = s.items.find(i => i.id === p.id);
       if (soldItem) {
-        return { ...p, quantity: p.quantity - soldItem.quantity }; // Handle quantity correctly
+        return { ...p, quantity: p.quantity - soldItem.quantity }; 
       }
       return p;
     });
@@ -103,14 +103,14 @@ export const StoreProvider = ({ children }: PropsWithChildren) => {
   const addSupplyTransaction = (t: SupplyTransaction) => {
     setSupplyTransactions([t, ...supplyTransactions]);
     
-    // Increase Stock
+    // Increase Stock automatically
     setProducts(prev => prev.map(p => 
         p.id === t.productId 
         ? { ...p, quantity: p.quantity + t.quantity } 
         : p
     ));
 
-    // Update Supplier Stats
+    // Update Supplier Stats (increase items supplied count)
     setSuppliers(prev => prev.map(s => 
         s.id === t.supplierId 
         ? { ...s, itemsSupplied: s.itemsSupplied + 1 }
